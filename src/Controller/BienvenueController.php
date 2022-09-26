@@ -11,7 +11,6 @@ class BienvenueController extends AbstractController
     #[Route('/welcome', name: 'app_bienvenue')]
     public function index(): Response
     {
-
         return $this->render('bienvenue/index.html.twig');
     }
 

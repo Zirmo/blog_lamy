@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des articles{% endblock %}
+
+{% block body %}
+    <div class="container">
+    <h1 >Liste des articles</h1>
+    <ul>
+        {% for article in articles %}
+            <li><a href="{{ path('app_article_id', { id : article.id}) }}">{{ article.Titre() }} </a>{{ article.createdAt |date("m/d/Y") }}</li>
+
+
+        {% endfor %}
+    </ul>
+    </div>
+{% endblock %}
