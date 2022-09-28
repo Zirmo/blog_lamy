@@ -4,9 +4,9 @@
 
 {% block body %}
     <div class="container">
-        <h1 >Detail de l'article</h1>
+        <h1 >{{ article.titre }}</h1>
+        <a class="btn btn-secondary " href="{{ path('app_categorie_slug', { slug : article.categorie.slug}) }}" role="button">{{ article.categorie.titre }}</a>
         <div>
-            <h2>{{ article.titre }}</h2>
             <p>{{ article.contenu }}</p>
         </div>
     </div>

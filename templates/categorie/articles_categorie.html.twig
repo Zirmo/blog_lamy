@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles Categorie{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 >Les {{ categorie.articles.count }} articles de la categorie {{ categorie.titre }}</h1>
+        <ul>
+        {% for article in articles %}
+            <li><h2>{{ article.titre }}</h2></li>
+            <p> créé le {{ article.createdAt |date("m/d/Y")  }}</p>
+            <p>{{ article.contenu }}</p>
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

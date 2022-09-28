@@ -39,6 +39,10 @@ class ArticleRepository extends ServiceEntityRepository
         }
     }
 
+    public function findBySlugWithCAtegorie(){
+        //requete avec jointure
+    }
+
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */
