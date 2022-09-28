@@ -38,6 +38,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             $numCategorie = $faker->numberBetween(0,8);
             $article->setCategorie($this->getReference("categorie".$numCategorie));
 
+            $this->addReference("article".$i,$article);
             //generer l'ordre insert
             //INSERT INTO articule VALUES ("Titre 1","contenu 1")
             $manager->persist($article);

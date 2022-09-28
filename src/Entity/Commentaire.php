@@ -20,6 +20,13 @@ class Commentaire
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    private ?Utilisateur $utilisateur_id = null;
+
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Article $article_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +52,30 @@ class Commentaire
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUtilisateurId(): ?Utilisateur
+    {
+        return $this->utilisateur_id;
+    }
+
+    public function setUtilisateurId(?Utilisateur $utilisateur_id): self
+    {
+        $this->utilisateur_id = $utilisateur_id;
+
+        return $this;
+    }
+
+    public function getArticleId(): ?Article
+    {
+        return $this->article_id;
+    }
+
+    public function setArticleId(?Article $article_id): self
+    {
+        $this->article_id = $article_id;
 
         return $this;
     }
