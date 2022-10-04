@@ -9,5 +9,22 @@
         <div>
             <p>{{ article.contenu }}</p>
         </div>
+        {% if article.commentaires.count >1 %}
+        <h2>{{ article.commentaires.count }} Commentaires</h2>
+        {%else %}
+        <h2>{{ article.commentaires.count }} Commentaire</h2>
+        {% endif %}
+        {% if commentaires %}
+            {% for commentaire in commentaires %}
+                {% if commentaire.utilisateurId %}
+                <h3>{{ commentaire.utilisateurId.pseudo }} {{ commentaire.createdAt | date("d/m/Y") }}</h3>
+                {% else %}
+                <h3>Anonyme {{ commentaire.createdAt | date("d/m/Y") }}</h3>
+                {%  endif %}
+                <p>{{ commentaire.contenu }}</p>
+            {% endfor %}
+        {% else %}
+            <p>Aucun commentaire pour le moment</p>
+        {% endif %}
     </div>
 {% endblock %}
