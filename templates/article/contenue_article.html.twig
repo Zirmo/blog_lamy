@@ -5,7 +5,12 @@
 {% block body %}
     <div class="container">
         <h1 >{{ article.titre }}</h1>
-        <a class="btn btn-secondary " href="{{ path('app_categorie_slug', { slug : article.categorie.slug}) }}" role="button">{{ article.categorie.titre }}</a>
+        {% if article.categorie %}
+        <a class="btn btn-secondary " href="{{ path('app_categorie_slug', { slug : article.categorie.slug}) }}" role="button">{{ article.categorie.titre }}
+            </a>
+        {% else %}
+        <p>Pas de catégorie</p>
+        {% endif %}
         <div>
             <p>{{ article.contenu }}</p>
         </div>
@@ -17,9 +22,9 @@
         {% if commentaires %}
             {% for commentaire in commentaires %}
                 {% if commentaire.utilisateurId %}
-                <h3>{{ commentaire.utilisateurId.pseudo }} {{ commentaire.createdAt | date("d/m/Y") }}</h3>
+                <h3>{{ commentaire.utilisateurId.pseudo }} </h3><p>({{ commentaire.createdAt | date("d/m/Y") }})</p>
                 {% else %}
-                <h3>Anonyme {{ commentaire.createdAt | date("d/m/Y") }}</h3>
+                <h3>Anonyme </h3><p>({{ commentaire.createdAt | date("d/m/Y") }})</p>
                 {%  endif %}
                 <p>{{ commentaire.contenu }}</p>
             {% endfor %}

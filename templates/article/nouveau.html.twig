@@ -7,8 +7,27 @@
 {% block body %}
     <h1 class="mb-3">Creation d'un nouvel article</h1>
     {{ form_start(formArticle) }}
-    {{ form_row(formArticle.titre) }}
-    {{ form_row(formArticle.contenu) }}
+    {# {{ form_label(formArticle.titre, "Titre de l'article",{
+        'label_attr': {'class': 'text-danger'}
+    }) }}
+    {{ form_widget(formArticle.titre,{ 'attr' : {'placeholder' : "veuillez saisir un titre"}}) }}
+    {{ form_help(formArticle.titre,{
+        'help':"Le titre doit contenir 5 caractere"
+    }) }}
+    #}
+    {{ form_row(formArticle.titre,{
+        'label' : "Titre de l'article" ,
+        'attr' :{'placeholder' : "Veuillez saisir le titre de l'article"
+
+        },
+        'help' : "Le titre doit contenir 5 caractères pour etre validé"
+    }) }}
+
+    {{ form_label(formArticle.contenu , "Contenu de l'article") }}
+    {{ form_widget(formArticle.contenu,{'attr':{"placeholder" :"veullez saisir le contenu de l'article"}}) }}
+
+    {{ form_row(formArticle.categorie) }}
+
 
     <input type="submit" class="btn btn-primary" value="ajouter">
     {{ form_end(formArticle) }}
