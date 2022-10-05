@@ -27,7 +27,7 @@
     {{ form_widget(formArticle.contenu,{'attr':{"placeholder" :"veullez saisir le contenu de l'article"}}) }}
 
     {{ form_row(formArticle.categorie) }}
-
+    {{ form_row(formArticle.isPublie ,{ 'label' : "Publier l'article ?"} ) }}
 
     <input type="submit" class="btn btn-primary" value="ajouter">
     {{ form_end(formArticle) }}

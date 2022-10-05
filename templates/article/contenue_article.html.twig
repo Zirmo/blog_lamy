@@ -19,6 +19,22 @@
         {%else %}
         <h2>{{ article.commentaires.count }} Commentaire</h2>
         {% endif %}
+
+        {{ form_start(formCommentaire) }}
+        {{ form_row(formCommentaire.contenu,{
+            'label' : "commenter" ,
+            'attr' :{'placeholder' : "ecrire un commentaire"
+            }
+        }) }}
+        {{ form_row(formCommentaire.pseudo ,{
+            'label ' : "pseudo" ,
+            'errors' : "Le pseudo n'existe pas"
+
+        }) }}
+        <input type="submit" class="btn btn-primary" value="ajouter">
+        {{ form_end(formCommentaire) }}
+
+
         {% if commentaires %}
             {% for commentaire in commentaires %}
                 {% if commentaire.utilisateurId %}
