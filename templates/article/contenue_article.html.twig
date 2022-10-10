@@ -12,7 +12,7 @@
         <p>Pas de catégorie</p>
         {% endif %}
         <div>
-            <p>{{ article.contenu }}</p>
+            <p>{{ article.contenu | raw }}</p>
         </div>
         {% if article.commentaires.count >1 %}
         <h2>{{ article.commentaires.count }} Commentaires</h2>
@@ -27,8 +27,8 @@
             }
         }) }}
         {{ form_row(formCommentaire.pseudo ,{
+            'value' : '',
             'label ' : "pseudo" ,
-            'errors' : "Le pseudo n'existe pas"
 
         }) }}
         <input type="submit" class="btn btn-primary" value="ajouter">

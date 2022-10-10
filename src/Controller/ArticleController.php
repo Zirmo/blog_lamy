@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -69,13 +70,13 @@ class ArticleController extends AbstractController
         $commentaire =new Commentaire();
         $formCommentaire=$this->createForm(CommentaireType::class, $commentaire);
         $formCommentaire ->handleRequest($request);
-        if ($formCommentaire->isSubmitted()){
-            $commentaire->setUtilisateurId($this->utilisateurRepository->findOneBy(['pseudo'=>$formCommentaire->get('pseudo')->getData()]))
+        if ($formCommentaire->isSubmitted() && $formCommentaire->isValid()){
+            $commentaire->setUtilisateurId($this->utilisateurRepository->findOneBy(['pseudo'=>$formCommentaire->get('pseudo')->addError(new FormError("le pseudo n'existe pas"))->getData()]))
                 ->setArticleId($this->articleRepository->findOneBy(["slug"=>$slug]))
                 ->setCreatedAt(new \DateTime());
-            //inserer l'article dans la base de données
+            //inserer l'article dans la base de donnée
             $this->commentaireRepository->add($commentaire,true);
-            return $this->redirectToRoute('app_article_slug',['slug'=>$slug]);
+            //return $this->redirectToRoute('app_article_slug',['slug'=>$slug]);
         }
 
         return $this->renderForm('article/contenue_article.html.twig',[
