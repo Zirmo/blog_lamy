@@ -23,25 +23,22 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ArticleController extends AbstractController
 {
-    private ArticleRepository $articleRepository ;
+    private ArticleRepository $articleRepository;
     private CommentaireRepository $commentaireRepository;
     private UtilisateurRepository $utilisateurRepository;
 
 
-
-
-    public function __construct(ArticleRepository $articleRepository, CommentaireRepository $commentaireRepository,UtilisateurRepository $utilisateurRepository)
+    public function __construct(ArticleRepository $articleRepository, CommentaireRepository $commentaireRepository, UtilisateurRepository $utilisateurRepository)
     {
         $this->articleRepository = $articleRepository;
-        $this->commentaireRepository=$commentaireRepository ;
-        $this->utilisateurRepository=$utilisateurRepository ;
+        $this->commentaireRepository = $commentaireRepository;
+        $this->utilisateurRepository = $utilisateurRepository;
 
     }
 
     #[Route('/articles', name: 'app_article')]
-
     // à l'appel de la methode, symfony vas creer un objet de la classe ArticleRepository et le passer en parametre de la methode
-    // mecanisme : INJECTION DE DEPENDANCES
+        // mecanisme : INJECTION DE DEPENDANCES
     public function getArticles(PaginatorInterface $paginator, Request $request): Response
     {
         // recuperer les infos dans la base de donnees
@@ -51,67 +48,67 @@ class ArticleController extends AbstractController
         //mise en place de la pagination
 
         $articles = $paginator->paginate(
-            $this->articleRepository->findBy(["isPublie"=> true ],['createdAt' => 'DESC'],),
+            $this->articleRepository->findBy(["isPublie" => true], ['createdAt' => 'DESC'],),
             $request->query->getInt('page', 1), /*page number*/
             10 /*limit per page*/
         );
 
-        return $this->render('article/index.html.twig',[
+        return $this->render('article/index.html.twig', [
             "articles" => $articles
         ]);
     }
 
-    #[Route('/articles/{slug}', name: 'app_article_slug' , methods: ['GET', 'POST'])]
-    public function getArticle(SluggerInterface $slugger ,Request $request,$slug): Response
+    #[Route('/articles/{slug}', name: 'app_article_slug', methods: ['GET', 'POST'])]
+    public function getArticle(SluggerInterface $slugger, Request $request, $slug): Response
     {
         // recuperer les infos dans la base de donnees
         // le controleur fais appel au modele (classe du modele) afin de recuperer la liste des articles
         // $repository = new ArticleRepository();
-        $commentaire =new Commentaire();
-        $formCommentaire=$this->createForm(CommentaireType::class, $commentaire);
-        $formCommentaire ->handleRequest($request);
-        if ($formCommentaire->isSubmitted() && $formCommentaire->isValid()){
-            $commentaire->setUtilisateurId($this->utilisateurRepository->findOneBy(['pseudo'=>$formCommentaire->get('pseudo')->addError(new FormError("le pseudo n'existe pas"))->getData()]))
-                ->setArticleId($this->articleRepository->findOneBy(["slug"=>$slug]))
+        $commentaire = new Commentaire();
+        $formCommentaire = $this->createForm(CommentaireType::class, $commentaire);
+        $formCommentaire->handleRequest($request);
+        if ($formCommentaire->isSubmitted() && $formCommentaire->isValid()) {
+            $commentaire->setUtilisateurId($this->utilisateurRepository->findOneBy(['pseudo' => $formCommentaire->get('pseudo')->addError(new FormError("le pseudo n'existe pas"))->getData()]))
+                ->setArticleId($this->articleRepository->findOneBy(["slug" => $slug]))
                 ->setCreatedAt(new \DateTime());
             //inserer l'article dans la base de donnée
-            $this->commentaireRepository->add($commentaire,true);
+            $this->commentaireRepository->add($commentaire, true);
             //return $this->redirectToRoute('app_article_slug',['slug'=>$slug]);
         }
 
-        return $this->renderForm('article/contenue_article.html.twig',[
-            "article" => $this->articleRepository->findOneBy(["slug"=>$slug]),
-            "commentaires"=>$this->commentaireRepository->findBy(["article_id"=>$this->articleRepository->findBy(["slug"=>$slug])]),
-            "formCommentaire"=>$formCommentaire
+        return $this->renderForm('article/contenue_article.html.twig', [
+            "article" => $this->articleRepository->findOneBy(["slug" => $slug]),
+            "commentaires" => $this->commentaireRepository->findBy(["article_id" => $this->articleRepository->findBy(["slug" => $slug])]),
+            "formCommentaire" => $formCommentaire
         ]);
     }
 
 
-    #[Route('/articles/nouveau', name: 'app_article_nouveau',methods: ['GET', 'POST'],priority: 1 )]
-    public function insert(SluggerInterface $slugger , Request $request  ) :Response {
-        $article = new Article() ;
+    #[Route('/articles/nouveau', name: 'app_article_nouveau', methods: ['GET', 'POST'], priority: 1)]
+    public function insert(SluggerInterface $slugger, Request $request): Response
+    {
+        $article = new Article();
 
         //creation du formulaire
-        $formArticle=$this->createForm(ArticleType::class , $article);
+        $formArticle = $this->createForm(ArticleType::class, $article);
 
         // reconnaitre si le formulaire a ete soumis ou pas
-        $formArticle -> handleRequest($request);
+        $formArticle->handleRequest($request);
         // est ce que le formulaire a ete soumis
-        if ($formArticle->isSubmitted() && $formArticle->isValid()){
+        if ($formArticle->isSubmitted() && $formArticle->isValid()) {
             $article->setSlug($slugger->slug($article->getTitre())->lower())
-            ->setCreatedAt(new \DateTime());
+                ->setCreatedAt(new \DateTime());
             //inserer l'article dans la base de données
-            $this->articleRepository->add($article,true);
+            $this->articleRepository->add($article, true);
             return $this->redirectToRoute('app_article');
         }
 
         //appel de la vue twig permettant d'afficher le formulaire
 
 
-        return $this->renderForm('article/nouveau.html.twig',[
-            "formArticle"=>$formArticle
+        return $this->renderForm('article/nouveau.html.twig', [
+            "formArticle" => $formArticle
         ]);
-
 
 
         /*$article->setTitre('Nouvel Article 2')->setContenu("Contenu de l'Article 2")->setSlug($slugger->slug($article->getTitre())->lower())->setCreatedAt(new \DateTime());
@@ -120,5 +117,35 @@ class ArticleController extends AbstractController
 
         return $this->redirectToRoute("app_article"); */
 
+    }
+
+    #[Route('/articles/modifie:{slug}', name: 'app_articles_modifier_slug', methods: ['GET' , 'POST'] , priority: 1)]
+
+// A l'appel de la méthode symfony va créer un objet de la classe ArticleRepossitory
+        // et le passer en paramètre de la méthode
+        // Mécanisme : INJECTION DE DEPENDANCES
+    public function update(SluggerInterface $slugger, Request $request,$slug): Response
+    {
+        $article = $this->articleRepository->findOneBy(["slug" => $slug]);
+        // Création du formulaire
+        $formArticle = $this->createForm(ArticleType::class, $article);
+
+        // Reconnaître si le formulaire a été soumis ou pas
+        $formArticle->handleRequest($request);
+        // Est-ce que le formulaire a été soumis
+        if ($formArticle->isSubmitted() && $formArticle->isValid()) {
+            $article->setSlug($slugger->slug($article->getTitre())->lower());
+
+
+            $this->articleRepository->add($article, true);
+            return $this->redirectToRoute("app_article");
+        }
+
+        // Appel de le vue twig permettant d'afficher le formulaire
+        return $this->renderForm('article/modifier.html.twig', [
+                'formArticle' => $formArticle,
+                'article' => $article
+            ]
+        );
     }
 }

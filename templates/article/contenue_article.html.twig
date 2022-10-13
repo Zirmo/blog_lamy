@@ -13,6 +13,8 @@
         {% endif %}
         <div>
             <p>{{ article.contenu | raw }}</p>
+            <a class="btn btn-secondary " href="{{ path('app_articles_modifier_slug', { slug : article.slug}) }}" role="button">Modifier l'article
+            </a>
         </div>
         {% if article.commentaires.count >1 %}
         <h2>{{ article.commentaires.count }} Commentaires</h2>
@@ -24,7 +26,8 @@
         {{ form_row(formCommentaire.contenu,{
             'label' : "commenter" ,
             'attr' :{'placeholder' : "ecrire un commentaire"
-            }
+            },
+            'value' :'',
         }) }}
         {{ form_row(formCommentaire.pseudo ,{
             'value' : '',
