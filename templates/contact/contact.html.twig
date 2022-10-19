@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ContactController!{% endblock %}
+
+{% block body %}
+    <h1 class="mb-3">Contacter nous</h1>
+    {{ form_start(formContact) }}
+    {# {{ form_label(formContact.titre, "Titre de l'article",{
+        'label_attr': {'class': 'text-danger'}
+    }) }}
+    {{ form_widget(formContact.titre,{ 'attr' : {'placeholder' : "veuillez saisir un titre"}}) }}
+    {{ form_help(formContact.titre,{
+        'help':"Le titre doit contenir 5 caractere"
+    }) }}
+    #}
+    {{ form_row(formContact.nom,{
+        'label' : "Nom" ,
+        'attr' :{'placeholder' : "Veuillez saisir votre nom"
+        }
+    }) }}
+    {{ form_row(formContact.prenom,{
+        'label' : "Prenom" ,
+        'attr' :{'placeholder' : "Veuillez saisir votre prenom"
+        }
+    }) }}
+    {{ form_row(formContact.email,{
+        'label' : "Email" ,
+        'attr' :{'placeholder' : "Veuillez saisir votre email"
+        }
+    }) }}
+    {{ form_row(formContact.objet,{
+        'label' : "Objet" ,
+        'attr' :{'placeholder' : "Quel est l'objet de votre email"
+        }
+    }) }}
+    {{ form_row(formContact.contenu,{
+        'label' : "Message" ,
+        'attr' :{'placeholder' : "Veuillez saisir votre message"
+        }
+    }) }}
+
+
+
+
+    <input type="submit" class="btn btn-primary" value="Envoyer">
+    {{ form_end(formContact) }}
+{% endblock %}

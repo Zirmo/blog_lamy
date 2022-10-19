@@ -27,6 +27,15 @@ class Utilisateur {
     -prenom :string
     -pseudo :string
 }
+class Contact {
+    -id : int
+    -nom :string
+    -prenom :string
+    -email : string
+    -objet :string
+    -contenu :string
+    -createAt : Datetime
+}
 Article "0..*"-- "0..1" Categorie
 Article "1..1"--"0..*" Commentaire
 Commentaire "0..*"-- "0..1"Utilisateur
